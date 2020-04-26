@@ -182,30 +182,33 @@ def main():
 
 
     #Hyper Parameter setting for Unet Training
-    IMAGE_DIR = '/home/LUNG_DATA/Image'
-    MASK_DIR = '/home/LUNG_DATA/Mask'
+    IMAGE_DIR = '/home/LUNG_DATA/Image_1/'
+    MASK_DIR = '/home/LUNG_DATA/Mask_1/'
     validation_proportion = 0.25
-    test_size = 0.2
+
+    #Meta Information
+    meta = pd.read_csv('/home/LUNG_DATA/meta_csv/meta.csv')
+
+    # Get train/test label from meta.csv
+    meta['original_image']= meta['original_image'].apply(lambda x:IMAGE_DIR+ x +'.npy')
+    meta['mask_image'] = meta['mask_image'].apply(lambda x:MASK_DIR+ x +'.npy')
+  
+    train_meta = meta[meta['Segmentation_train']==True]
+    test_meta = meta[meta['Segmentation_train']==False]
 
     # Get all *npy images into list
-    folder_images = list()
-    folder_masks = list()
-    for (dirpath, _ , filenames) in os.walk(IMAGE_DIR):
-        folder_images += [os.path.join(dirpath, file) for file in filenames]
-    for (dirpath, _ , filenames) in os.walk(MASK_DIR):
-        folder_masks += [os.path.join(dirpath, file) for file in filenames]
-    folder_images.sort()
-    folder_masks.sort()
+    train_image_paths = list(train_meta['original_image'])
+    train_mask_paths = list(train_meta['mask_image'])
 
     print("*"*50)
-    print("The lenght of image, mask folders are {},{}".format(len(folder_images),len(folder_masks)))
+    print("The lenght of image, mask folders are {},{}".format(len(train_image_paths),len(train_mask_paths)))
 
     # Divide list into train, validation, test
-    train_image_paths,test_image_paths,train_mask_paths,test_mask_paths = train_test_split(folder_images,folder_masks,test_size=test_size,random_state=1)
+    
     train_image_paths,val_image_paths,train_mask_paths,val_mask_paths = train_test_split(train_image_paths,train_mask_paths,test_size=validation_proportion,random_state=1)
 
     print("*"*50)
-    print("Train: {}  Validation: {}  Test: {}".format(len(train_image_paths),len(val_image_paths),len(test_image_paths)))
+    print("Train: {}  Validation: {} ".format(len(train_image_paths),len(val_image_paths)))
 
 
     # Create Dataset
