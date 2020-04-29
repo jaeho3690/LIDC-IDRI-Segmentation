@@ -14,7 +14,7 @@ from torch.optim import lr_scheduler
 import albumentations as albu
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
-import losses
+from losses import BCEDiceLoss
 from dataset import MyLidcDataset
 from metrics import iou_score,dice_coef
 from utils import AverageMeter, str2bool
@@ -28,13 +28,13 @@ def parse_args():
     # model
     parser.add_argument('--name', default="UNET",
                         help='model name: UNET',choices=['UNET', 'NestedUNET'])
-    parser.add_argument('--extra','--e', default='base',help="'epoch'_'with_augment'")
+    parser.add_argument('--extra','-e', default='base',help="'epoch'_'with_augment'")
     parser.add_argument('--epochs', default=300, type=int, metavar='N',
                         help='number of total epochs to run')
-    parser.add_argument('-b', '--batch_size', default=6, type=int,
+    parser.add_argument('-b', '--batch_size', default=12, type=int,
                         metavar='N', help='mini-batch size (default: 6)')
     parser.add_argument('--early_stopping', default=30, type=int,
-                        metavar='N', help='early stopping (default: 30)')
+                        metavar='N', help='early stopping (default: 40)')
     parser.add_argument('--num_workers', default=4, type=int)
 
     # optimizer
@@ -155,7 +155,8 @@ def main():
     with open('model_outputs/{}/config.yml'.format(file_name), 'w') as f:
         yaml.dump(config, f)
 
-    criterion = nn.BCEWithLogitsLoss().cuda()
+    #criterion = nn.BCEWithLogitsLoss().cuda()
+    criterion = BCEDiceLoss().cuda()
     cudnn.benchmark = True
 
     # create model
@@ -181,10 +182,10 @@ def main():
         raise NotImplementedError
 
 
-    #Hyper Parameter setting for Unet Training
+    #Directory of Image, Mask
     IMAGE_DIR = '/home/LUNG_DATA/Image_1/'
     MASK_DIR = '/home/LUNG_DATA/Mask_1/'
-    validation_proportion = 0.25
+
 
     #Meta Information
     meta = pd.read_csv('/home/LUNG_DATA/meta_csv/meta.csv')
@@ -192,23 +193,23 @@ def main():
     # Get train/test label from meta.csv
     meta['original_image']= meta['original_image'].apply(lambda x:IMAGE_DIR+ x +'.npy')
     meta['mask_image'] = meta['mask_image'].apply(lambda x:MASK_DIR+ x +'.npy')
-  
-    train_meta = meta[meta['Segmentation_train']==True]
-    test_meta = meta[meta['Segmentation_train']==False]
 
-    # Get all *npy images into list
+    train_meta = meta[meta['data_split']=='Train']
+    val_meta = meta[meta['data_split']=='Validation']
+
+    # Get all *npy images into list for Train
     train_image_paths = list(train_meta['original_image'])
     train_mask_paths = list(train_meta['mask_image'])
 
+    # Get all *npy images into list for Validation
+    val_image_paths = list(val_meta['original_image'])
+    val_mask_paths = list(val_meta['mask_image'])
     print("*"*50)
-    print("The lenght of image, mask folders are {},{}".format(len(train_image_paths),len(train_mask_paths)))
-
-    # Divide list into train, validation, test
-    
-    train_image_paths,val_image_paths,train_mask_paths,val_mask_paths = train_test_split(train_image_paths,train_mask_paths,test_size=validation_proportion,random_state=1)
-
+    print("The lenght of image: {}, mask folders: {} for train".format(len(train_image_paths),len(train_mask_paths)))
+    print("The lenght of image: {}, mask folders: {} for validation".format(len(val_image_paths),len(val_mask_paths)))
+    print("Ratio between Val/ Train is {:2f}".format(len(val_image_paths)/len(train_image_paths)))
     print("*"*50)
-    print("Train: {}  Validation: {} ".format(len(train_image_paths),len(val_image_paths)))
+
 
 
     # Create Dataset
@@ -222,14 +223,14 @@ def main():
         shuffle=True,
         pin_memory=True,
         drop_last=True,
-        num_workers=2)
+        num_workers=6)
     val_loader = torch.utils.data.DataLoader(
         val_dataset,
         batch_size=config['batch_size'],
         shuffle=False,
         pin_memory=True,
         drop_last=False,
-        num_workers=2)
+        num_workers=6)
 
     log= pd.DataFrame(index=[],columns= ['epoch','lr','loss','iou','dice','val_loss','val_iou'])
 
