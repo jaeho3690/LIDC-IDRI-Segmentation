@@ -7,7 +7,7 @@ def iou_score(output, target):
     smooth = 1e-5
 
     if torch.is_tensor(output):
-        output = output.data.cpu().numpy()
+        output = torch.sigmoid(output).data.cpu().numpy()
     if torch.is_tensor(target):
         target = target.data.cpu().numpy()
     output_ = output > 0.5
@@ -19,11 +19,26 @@ def iou_score(output, target):
 
 def dice_coef(output, target):
     smooth = 1e-5
-    
-    output = output.view(-1).data.cpu().numpy()
+
+    # we need to use sigmoid because the output of Unet is logit.
+    output = torch.sigmoid(output).view(-1).data.cpu().numpy()
     target = target.view(-1).data.cpu().numpy()
     intersection = (output * target).sum()
     
 
     return (2. * intersection + smooth) / \
         (output.sum() + target.sum() + smooth)
+
+def dice_coef2(output, target):
+    smooth = 1e-5
+
+    output = output.view(-1)
+    output = (output>0.5).float().cpu().numpy()
+    target = target.view(-1).data.cpu().numpy()
+    intersection = (output * target).sum()
+    
+
+    return (2. * intersection + smooth) / \
+        (output.sum() + target.sum() + smooth)
+
+
