@@ -29,13 +29,13 @@ def parse_args():
     parser.add_argument('--name', default="UNET",
                         help='model name: UNET',choices=['UNET', 'NestedUNET'])
     parser.add_argument('--extra','-e', default='base',help="'epoch'_'with_augment'")
-    parser.add_argument('--epochs', default=300, type=int, metavar='N',
+    parser.add_argument('--epochs', default=400, type=int, metavar='N',
                         help='number of total epochs to run')
     parser.add_argument('-b', '--batch_size', default=12, type=int,
                         metavar='N', help='mini-batch size (default: 6)')
-    parser.add_argument('--early_stopping', default=30, type=int,
-                        metavar='N', help='early stopping (default: 40)')
-    parser.add_argument('--num_workers', default=4, type=int)
+    parser.add_argument('--early_stopping', default=50, type=int,
+                        metavar='N', help='early stopping (default: 50)')
+    parser.add_argument('--num_workers', default=8, type=int)
 
     # optimizer
     parser.add_argument('--optimizer', default='Adam',
@@ -234,7 +234,7 @@ def main():
 
     log= pd.DataFrame(index=[],columns= ['epoch','lr','loss','iou','dice','val_loss','val_iou'])
 
-    best_iou = 0
+    best_dice = 0
     trigger = 0
 
 
@@ -266,10 +266,10 @@ def main():
 
         trigger += 1
 
-        if val_log['iou'] > best_iou:
+        if val_log['dice'] > best_dice:
             torch.save(model.state_dict(), 'model_outputs/{}/model.pth'.format(file_name))
-            best_iou = val_log['iou']
-            print("=> saved best model as validation IOU is greater than previous best IOU")
+            best_dice = val_log['dice']
+            print("=> saved best model as validation DICE is greater than previous best DICE")
             trigger = 0
 
         # early stopping

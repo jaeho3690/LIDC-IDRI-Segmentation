@@ -30,6 +30,7 @@ def dice_coef(output, target):
         (output.sum() + target.sum() + smooth)
 
 def dice_coef2(output, target):
+    "This metric is for validation purpose"
     smooth = 1e-5
 
     output = output.view(-1)

@@ -30,7 +30,7 @@ def parse_args():
                         help='model name: UNET',choices=['UNET', 'NestedUNET'])
     # Get augmented version?
     parser.add_argument('--augmentation',default=False, 
-                help='Shoud we get the augmented version')
+                help='Shoud we get the augmented version?')
 
     args = parser.parse_args()
 
@@ -55,6 +55,7 @@ def calculate_fp(prediction_dir,mask_dir,distance_threshold=80):
     confusion_matrix =[0,0,0,0]
     # This binary structure enables the function to recognize diagnoally connected label as same nodule.
     s = generate_binary_structure(2,2)
+    print('Length of prediction dir is ',len(os.listdir(prediction_dir)))
     for prediction in os.listdir(prediction_dir):
         #print(confusion_matrix)
         pid = 'LIDC-IDRI-'+prediction[:4]
@@ -72,20 +73,20 @@ def calculate_fp(prediction_dir,mask_dir,distance_threshold=80):
                 lab[lab==(n+1)]=1
                 predict_com=np.array(ndi.center_of_mass(labeled_array))
                 if np.linalg.norm(predict_com-answer_com,2) < distance_threshold:
-                    if patience != 0:
-                        #print("HIT")
-                        continue
-                    # add true positive
-                    confusion_matrix[0]+=1
                     patience +=1
                 else:
-                    # add false positive
                     confusion_matrix[2]+=1
-                
+            if patience > 0:
+                # Add to True Positive 
+                confusion_matrix[0]+=1
+            else:
+                # Add to False Negative
+                # if the patience remains 0, and nf >0, it means that the slice contains both the TN and FP
+                confusion_matrix[3]+=1
+            
         else:
             # Add False Negative since the UNET didn't detect a cancer even when there was one
             confusion_matrix[3]+=1
-        
     return np.array(confusion_matrix)
 
 def calculate_fp_clean_dataset(prediction_dir,distance_threshold=80):
