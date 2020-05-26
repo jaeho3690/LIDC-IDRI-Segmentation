@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument('--name', default="UNET",
                         help='model name: UNET',choices=['UNET', 'NestedUNET'])
     # Get augmented version?
-    parser.add_argument('--augmentation',default=False, 
+    parser.add_argument('--augmentation',default=False,
                 help='Shoud we get the augmented version?')
 
     args = parser.parse_args()
@@ -77,13 +77,13 @@ def calculate_fp(prediction_dir,mask_dir,distance_threshold=80):
                 else:
                     confusion_matrix[2]+=1
             if patience > 0:
-                # Add to True Positive 
+                # Add to True Positive
                 confusion_matrix[0]+=1
             else:
                 # Add to False Negative
                 # if the patience remains 0, and nf >0, it means that the slice contains both the TN and FP
                 confusion_matrix[3]+=1
-            
+
         else:
             # Add False Negative since the UNET didn't detect a cancer even when there was one
             confusion_matrix[3]+=1
@@ -92,7 +92,7 @@ def calculate_fp(prediction_dir,mask_dir,distance_threshold=80):
 def calculate_fp_clean_dataset(prediction_dir,distance_threshold=80):
     """This calculates the confusion matrix for clean dataset"""
     #TP,TN,FP,FN
-    #When we calculate the confusion matrix for clean dataset, we can only get TP and FP. 
+    #When we calculate the confusion matrix for clean dataset, we can only get TP and FP.
     # TP - There is no nodule, and the segmentation model predicted there is no nodule
     # FP - There is no nodule, but the segmentation model predicted there is a nodule
     confusion_matrix =[0,0,0,0]
@@ -122,17 +122,17 @@ def calculate_fp_clean_dataset(prediction_dir,distance_threshold=80):
                         # add false positive
                         confusion_matrix[2]+=1
                         patience +=1
-                
+
         else:
             # Add True Negative since the UNET didn't detect a cancer even when there was one
             confusion_matrix[1]+=1
-        
+
     return np.array(confusion_matrix)
 
 def main():
     args = vars(parse_args())
 
-    if args['augmentation']:
+    if args['augmentation']== True:
         NAME = args['name'] + '_with_augmentation'
     else:
         NAME = args['name'] +'_base'
@@ -187,7 +187,7 @@ def main():
     print("Saving OUTPUT files in directory {}".format(OUTPUT_MASK_DIR))
     os.makedirs(OUTPUT_MASK_DIR,exist_ok=True)
 
-    
+
     test_dataset = MyLidcDataset(test_image_paths, test_mask_paths)
     test_loader = torch.utils.data.DataLoader(
         test_dataset,
