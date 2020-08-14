@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument('--name', default="UNET",
                         help='model name: UNET',choices=['UNET', 'NestedUNET'])
     # Get augmented version?
-    parser.add_argument('--augmentation',default=False,
+    parser.add_argument('--augmentation',default=False,type=str2bool,
                 help='Shoud we get the augmented version?')
 
     args = parser.parse_args()

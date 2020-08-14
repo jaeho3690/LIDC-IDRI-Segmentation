@@ -53,7 +53,7 @@ def parse_args():
                         help='nesterov')
 
     # data
-    parser.add_argument('--augmentation',default=False)
+    parser.add_argument('--augmentation',type=str2bool,default=False,choices=[True,False])
 
 
 
@@ -141,7 +141,11 @@ def main():
     # Get configuration
     config = vars(parse_args())
     # Make Model output directory
-    file_name = config['name']+'_'+config['extra']
+
+    if config['augmentation']== True:
+        file_name= config['name'] + '_with_augmentation'
+    else:
+        file_name = config['name'] +'_base'
     os.makedirs('model_outputs/{}'.format(file_name),exist_ok=True)
     print("Creating directory called",file_name)
 
