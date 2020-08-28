@@ -28,7 +28,6 @@ def parse_args():
     # model
     parser.add_argument('--name', default="UNET",
                         help='model name: UNET',choices=['UNET', 'NestedUNET'])
-    parser.add_argument('--extra','-e', default='base',help="'epoch'_'with_augment'")
     parser.add_argument('--epochs', default=400, type=int, metavar='N',
                         help='number of total epochs to run')
     parser.add_argument('-b', '--batch_size', default=12, type=int,
@@ -186,9 +185,10 @@ def main():
         raise NotImplementedError
 
 
-    #Directory of Image, Mask
-    IMAGE_DIR = '/home/LUNG_DATA/Image_1/'
-    MASK_DIR = '/home/LUNG_DATA/Mask_1/'
+    # Directory of Image, Mask folder generated from the preprocessing stage
+    # Write your own directory 
+    IMAGE_DIR = '/home/LUNG_DATA/Image/'
+    MASK_DIR = '/home/LUNG_DATA/Mask/'
 
 
     #Meta Information

@@ -162,8 +162,8 @@ def main():
     model = model.cuda()
 
     # Data loading code
-    IMAGE_DIR = '/home/LUNG_DATA/Image_1/'
-    MASK_DIR = '/home/LUNG_DATA/Mask_1/'
+    IMAGE_DIR = '/home/LUNG_DATA/Image/'
+    MASK_DIR = '/home/LUNG_DATA/Mask/'
     #Meta Information
     meta = pd.read_csv('/home/LUNG_DATA/meta_csv/meta.csv')
     # Get train/test label from meta.csv
