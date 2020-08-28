@@ -8,9 +8,9 @@ The model script for U-Net++ and some of the script format is sourced from ![her
 # Requirements
 * pytorch 1.4 
 * GPU is needed
-## 1.Check out my LIDC-IDRI-Preprocessing repository
+## 1. Check out my LIDC-IDRI-Preprocessing repository
 This repository goes through the preprocessing steps of the LIDC-IDRI data. Running the script will return .npy images for each lung cancer slice and mask slice. Also, a meta.csv, clean_meta.csv file will be made after running the jupyter file. 
-## 2.Fix directory settings
+## 2. Fix directory settings
 All the scripts were written when I was not so familiar with directory settings. I mostly used absolute directory. Please change each directory setting to fit yours. I apologize for the inconvenience.
 
 # Installation
@@ -20,7 +20,9 @@ conda create -n=<env_name> python=3.6
 conda activate <env_name>
 ```
 2. Install pip packages
+```
 pip install -r requirements.txt
+```
 
 # File Structure
 ```
