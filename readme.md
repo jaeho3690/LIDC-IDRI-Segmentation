@@ -32,7 +32,17 @@ The model script for U-Net++ is sourced from ![here](https://github.com/4uiiurz1
 ## 1.Check out my LIDC-IDRI-Preprocessing repository
 This repository goes through the preprocessing steps of the LIDC-IDRI data. Running the script will return .npy images for each lung cancer slice and mask slice. Also, a meta.csv, clean_meta.csv file will created after running the jupyter file. 
 ## 2. 
+<<<<<<< HEAD
 
+=======
+## 5. Contributing and Acknowledgement
+I started this Lung cancer detection project a year ago. I was really a newbie to python. I didn't even understand what a directory setting is at the time! However, I had to complete this project
+for some personal reasons. I looked through google and other githubs. But most of them were too hard to understand and the code itself lacked information. I hope my codes here could help
+other researchers first starting to do lung cancer detection projects. Please give a star if you found this repository useful.
+
+here is the link of github where I learned a lot from. Some of the codes are sourced from below.
+1. https://github.com/mikejhuang/LungNoduleDetectionClassification
+>>>>>>> 7e4378e258825f2f555592e39c683dbdea2eae7b
 
 
 
