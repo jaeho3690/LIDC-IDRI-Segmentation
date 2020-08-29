@@ -1,9 +1,9 @@
 # LIDC Segmentation of Lung Nodule with U-Net, U-Net++
-This repository is the second stage for Lung Cancer project. Please check out my first repository ![LIDC-IDRI-Preprocessing](https://github.com/jaeho3690/LIDC-IDRI-Preprocessing)
-Explanation for my first repository is on ![Medium](https://medium.com/@jaeho3690/how-to-start-your-very-first-lung-cancer-detection-project-using-python-part-1-3ab490964aae) as well!
+This repository is the second stage for Lung Cancer project. Please check out my first repository [LIDC-IDRI-Preprocessing](https://github.com/jaeho3690/LIDC-IDRI-Preprocessing)
+Explanation for my first repository is on [Medium](https://medium.com/@jaeho3690/how-to-start-your-very-first-lung-cancer-detection-project-using-python-part-1-3ab490964aae) as well!
 The input for this repository requires the output format from the first stage. 
 This repository would train a segmentation model(U-Net, U-Net++) for Lung Nodules. The whole script is implemented in Pytorch Framework.
-The model script for U-Net++ and some of the script format is sourced from ![here](https://github.com/4uiiurz1/pytorch-nested-unet)
+The model script for U-Net++ and some of the script format is sourced from [here](https://github.com/4uiiurz1/pytorch-nested-unet)
 
 # Requirements
 * pytorch 1.4 
