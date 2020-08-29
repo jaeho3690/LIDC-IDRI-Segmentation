@@ -185,15 +185,13 @@ def main():
         raise NotImplementedError
 
 
-    # Directory of Image, Mask folder generated from the preprocessing stage
-    # Write your own directory 
-    IMAGE_DIR = '/home/LUNG_DATA/Image/'
-    MASK_DIR = '/home/LUNG_DATA/Mask/'
-
-
-    #Meta Information
-    meta = pd.read_csv('/home/LUNG_DATA/meta_csv/meta.csv')
-
+    # Directory of Image, Mask folder generated from the preprocessing stage ###
+    # Write your own directory                                                 #
+    IMAGE_DIR = '/home/LUNG_DATA/Image/'                                       #
+    MASK_DIR = '/home/LUNG_DATA/Mask/'                                         #
+    #Meta Information                                                          #
+    meta = pd.read_csv('/home/LUNG_DATA/meta_csv/meta.csv')                    #
+    ############################################################################
     # Get train/test label from meta.csv
     meta['original_image']= meta['original_image'].apply(lambda x:IMAGE_DIR+ x +'.npy')
     meta['mask_image'] = meta['mask_image'].apply(lambda x:MASK_DIR+ x +'.npy')
