@@ -3,7 +3,7 @@ efficientnet-pytorch==0.6.3
 h5py==2.8.0
 imageio==2.3.0
 numpy==1.18.4
-opencv-python==4.1.1.26
+opencv-python==4.2.0.32
 pandas==0.24.2
 Pillow==6.2.2
 scikit-learn==0.19.1
