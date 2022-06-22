@@ -2,7 +2,7 @@ albumentations==0.4.5
 efficientnet-pytorch==0.6.3
 h5py==2.8.0
 imageio==2.3.0
-numpy==1.18.4
+numpy==1.22.0
 opencv-python==4.1.1.26
 pandas==0.24.2
 Pillow==6.2.2
